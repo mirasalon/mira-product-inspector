@@ -1,6 +1,5 @@
 search_endpoint = "https://tz52nf4jt5.execute-api.us-west-2.amazonaws.com/prod/search_web"
-// product_endpoint = "https://4s4lo22ly5.execute-api.us-west-2.amazonaws.com/dev/product/{pid}/review_string"
-product_endpoint = "http://localhost:5000/product/{pid}/review_string"
+product_endpoint = "https://1084cx35m6.execute-api.us-west-2.amazonaws.com/dev/product/{pid}/review_string"
 var product;
 var page_title = document.getElementsByTagName('title')[0].text
 data = { query: page_title }
