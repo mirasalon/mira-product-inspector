@@ -1,0 +1,24 @@
+{
+    "manifest_version": 2,
+  
+    "name": "Mira Beauty Product Inspector",
+    "description": "Mira helps you find the right products for you at the best price",
+    "version": "1.0",
+  
+    "browser_action": {
+     "default_icon": "icon.png",
+     "default_popup": "popup.html",
+     "default_title": "Mira Beauty Product Inspector"
+    },
+    "permissions":[
+        "activeTab"
+    ],
+     "content_scripts":[
+        {
+         "matches":[
+             "<all_urls>"
+         ],
+         "js":["content.js"]
+        }
+     ]
+}
