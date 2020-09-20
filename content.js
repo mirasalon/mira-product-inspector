@@ -1,5 +1,6 @@
 search_endpoint = "https://tz52nf4jt5.execute-api.us-west-2.amazonaws.com/prod/search_web"
-product_endpoint = "https://4s4lo22ly5.execute-api.us-west-2.amazonaws.com/dev/product/{pid}/review_string"
+// product_endpoint = "https://4s4lo22ly5.execute-api.us-west-2.amazonaws.com/dev/product/{pid}/review_string"
+product_endpoint = "http://localhost:5000/product/{pid}/review_string"
 var product;
 var page_title = document.getElementsByTagName('title')[0].text
 data = { query: page_title }
@@ -27,9 +28,9 @@ function fetchData() {
             }).then(res => {
                 return res.json()
             }).then(data => {
-                var review_string = data.review_string
+                var review_data = data.review_data
                 chrome.runtime.sendMessage({message:'product_data', product})
-                chrome.runtime.sendMessage({message:'product_review_string', review_string})
+                chrome.runtime.sendMessage({message:'product_review_data', review_data})
             })
     });
 }

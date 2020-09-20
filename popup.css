@@ -59,6 +59,10 @@ button {
     margin-bottom:10px;
 }
 
+button:hover{
+    cursor:pointer;
+}
+
 .attributeLabel {
     min-width:100px;
     white-space:nowrap;
@@ -105,4 +109,75 @@ button {
 
 .neutral {
     background-color: #D3D3D3;
+}
+
+#reviewFilters {
+    margin-top:12px;
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    flex-wrap:wrap;
+}
+
+.reviewTag:hover{
+    cursor: pointer;
+}
+
+.hidden{
+    display:none;
+}
+
+.activeFilter {
+    background-color:#1324FB;
+    color:white;
+}
+
+.facetLabel {
+    font-weight:bold;
+}
+
+.facetReviewCount {
+}
+
+.facetSentimentLabel{
+    margin:0px;
+}
+
+.percentageInfo {
+    display:flex;
+    flex-direction:row;
+    width:40%;
+}
+
+.ratingBar {
+    min-width:80%;
+    height:20px;
+    border: 1px solid black;
+    margin-bottom:5px;
+    margin-right:5px;
+}
+
+.ratingBarInner{
+    height:100%;
+}
+
+#variations{
+    font-weight:bold;
+}
+
+#ingredients{
+    margin-top:20px;
+    margin-bottom:20px;
+}
+
+table, th, td{
+    border: 1px solid #ddd;
+    border-collapse:collapse;
+    width:100%;
+    margin:0px;
+    padding:3px;
+}
+
+td {
+    padding-right:10px;
 }
