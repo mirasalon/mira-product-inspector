@@ -14,9 +14,6 @@ function formatAttributeDict(label, dict, reviewTag=true){
 
 function formatProductAttributes(product){
     attributes = ''
-    if(product.skinInfo){
-        attributes += formatAttributeDict('Skin Types', product.skinInfo);
-    }
     if(product.tags){
         var tags = {}
         product.tags.forEach(key => tags[key] = 'neutral')
@@ -29,8 +26,9 @@ function formatProductAttributes(product){
         if(product.concernInfo.bottom_concerns) product.concernInfo.bottom_concerns.map(o => concerns[o.facet] = 'negative')
         if(Object.keys(concerns).length > 0) attributes += formatAttributeDict('Qualities', concerns)
     }
-    var skin_tones = {'fair-skintone':'neutral','light-skintone':'neutral','medium-skintone':'neutral','olive-skintone':'neutral','deep-skintone':'neutral','rich-skintone':'neutral'}
-    attributes += formatAttributeDict('Skin Tones', skin_tones);
+    if(product.skinInfo){
+        attributes += formatAttributeDict('Skin Types', product.skinInfo);
+    }
     document.getElementById('attributes').innerHTML = attributes;
 }
 
@@ -54,7 +52,7 @@ function formatBaseDetails(product){
     document.getElementById('buyButton').onclick = function(){
         chrome.tabs.create({active:true, url:'https://mirabeauty.com' + product.url})
     }
-    document.getElementById('buyButton').innerHTML = 'Purchase on Mira' + ((product.price && product.price > 0) ? ' ( $' + String(product.price) + ' )' : '')
+    document.getElementById('buyButton').innerHTML = 'Buy on Mira' + ((product.price && product.price > 0) ? ' ( $' + String(product.price) + ' )' : '')
     // document.getElementById('trackButton').innerHTML = "Track Price"
     // document.getElementById('trackButton').onclick=function(){
     //     document.getElementById('trackButton').innerHTML = "Functionality coming soon! :)"
@@ -83,11 +81,24 @@ function addPercentage(key, value){
     // return "<p class='facetSentimentLabel'>" + key + " : " + String(value*100) + "% </p>"
 }
 
-function formatFacetAnalysisDetails(key, reviewDict){
+function formatReviewPercentage(r1, r2){
+    var revPerc = String(r1*100.0/r2).slice(0,3)
+    if (revPerc[revPerc.length - 1] === '.'){
+        revPerc = revPerc.slice(0, revPerc.length-1)
+    }
+    return revPerc + '%'
+}
+
+function formatFacetAnalysisDetails(key, reviewDict, totalReviews){
     str = ''
     if (Object.keys(reviewDict).length > 0){
-        str += "<div class='facetAnalysis " + keyToClassName(key) + "'><p class='facetLabel'>" + reviewDict.label + "</p>"
-        str += "<p class='facetReviewCount'>" + reviewDict.total_reviews + " reviews </p>"
+        str += "<div class='facetAnalysis " + keyToClassName(key) + "'><p class='facetLabel'>" + reviewDict.label + " reviews (" + reviewDict.total_reviews + ")</p>"
+        if (reviewDict.label === 'All'){
+            // str += "<p class='facetReviewCount'>" + reviewDict.total_reviews + " reviews (" + reviewDict.total_reviews + ")</p>"
+        } else {
+            // str += "<p class='facetReviewCount'>" + reviewDict.total_reviews + " " + reviewDict.label + " reviews (" + reviewDict.total_</p>"
+            str += "<p class='facetReviewCount'>" + formatReviewPercentage(reviewDict.total_reviews, totalReviews) + " of all reviews mentioned " + reviewDict.label.replace('All', '').trim() + "</p>"
+        }
         str += "<div class='facetSentiment'>"
         str += Object.keys(reviewDict.pos_neg_hist.pct).reverse().map(function(key){return addPercentage(key, reviewDict.pos_neg_hist.pct[key])}).join('')
         str += "</div></div>"
@@ -124,14 +135,25 @@ function createReviewFilterFunction(el, displayClass){
     }
 }
 
+function formatSkinToneAttributeTags(reviewData){
+    var skin_tone_keys = reviewData.map(function(x){return Object.keys(x)[0].includes('skintone') ? Object.keys(x)[0] : null}).filter(x => x)
+    var skin_tone_dict = {}
+    skin_tone_keys.forEach(key => skin_tone_dict[key] = 'neutral')
+    attributes = formatAttributeDict('Skin Tones', skin_tone_dict);
+    document.getElementById('attributes').innerHTML = document.getElementById('attributes').innerHTML + attributes;
+}
+
 function formatProductReviewData(reviewData){
     if (reviewData){
         // document.getElementById("reviewFilters").innerHTML = reviewData.map(function(x) {return formatReviewFilter(Object.keys(x)[0])}).join('')
+        formatSkinToneAttributeTags(reviewData);
         var tags = document.getElementsByClassName('reviewTag')
+        var totalReviews = reviewData[0]['All'][0]['total_reviews']
         for (var i = 0; i < tags.length; i++) {
             tags[i].onclick = createReviewFilterFunction(tags[i], tags[i].innerHTML)
         }
-        document.getElementById("reviewData").innerHTML = reviewData.map(function(x){return Object.values(x)[0].map(function(value) {return formatFacetAnalysisDetails(Object.keys(x)[0], value)}).join('')}).join('')
+        document.getElementById("reviewData").innerHTML = reviewData.map(function(x){return Object.values(x)[0].map(function(value) {return formatFacetAnalysisDetails(Object.keys(x)[0], value, totalReviews)}).join('')}).join('')
+
     }
 }
 
