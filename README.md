@@ -8,3 +8,4 @@ To get started:
 4. Click the Mira plugin button
 
 Alternatively, follow this step-by-step tutorial video: 
+https://www.loom.com/share/7108e881b5144d339cb4d80a0eac6a2a
