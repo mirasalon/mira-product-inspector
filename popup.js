@@ -57,7 +57,7 @@ function formatBaseDetails(product){
     // document.getElementById('trackButton').onclick=function(){
     //     document.getElementById('trackButton').innerHTML = "Functionality coming soon! :)"
     // }
-    document.getElementById('image').src = product.imageUrl
+    document.getElementById('image').src = "https://mira-product-images.imgix.net/" + product.id + ".png?auto=format&auto=compress&w=300"
     document.getElementById('variations').innerHTML = String(product.variations.length) + ' variations on mirabeauty.com'
     document.getElementById('ingredients').innerHTML = formatIngredients(product.ingredientSummary)
 }
